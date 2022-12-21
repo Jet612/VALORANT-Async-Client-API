@@ -36,7 +36,7 @@ class Client:
             async with session.get(f"https://auth.riotgames.com/userinfo", headers=headers) as resp:
                 return await resp.json()
 
-    async def authorize(self, username: str, password: str, use_query_response_mode: bool = False, multi_factor_code: str = None):
+    async def authorize(self, username: str, password: str, use_query_response_mode: bool = False, multi_factor_code: str = None) -> None:
         """Authorizes the client and gets entitlements token and access token."""
         self.username = username
         self.password = password
