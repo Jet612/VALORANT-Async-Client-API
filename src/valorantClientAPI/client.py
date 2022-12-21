@@ -79,7 +79,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/account-xp/v1/players/{puuid}", headers=headers) as resp:
@@ -98,7 +98,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientPlatform": self.client_platform,
                 "X-Riot-ClientVersion": self.client_version
@@ -119,7 +119,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientPlatform": self.client_platform,
                 "X-Riot-ClientVersion": self.client_version
@@ -137,7 +137,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
@@ -156,7 +156,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientPlatform": self.client_platform
             }
@@ -173,7 +173,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientVersion": self.client_version
             }
@@ -190,7 +190,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/restrictions/v3/penalties", headers=headers) as resp:
@@ -206,7 +206,7 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": f"Bearer {self.entitlements_token}",
+                "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/contract-definitions/v3/item-upgrades", headers=headers) as resp:
