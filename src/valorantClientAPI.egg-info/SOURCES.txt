@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+src/valorantClientAPI/__init__.py
+src/valorantClientAPI/client.py
+src/valorantClientAPI/example.py
+src/valorantClientAPI/riot_auth.py
+src/valorantClientAPI.egg-info/PKG-INFO
+src/valorantClientAPI.egg-info/SOURCES.txt
+src/valorantClientAPI.egg-info/dependency_links.txt
+src/valorantClientAPI.egg-info/top_level.txt

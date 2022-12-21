@@ -23,12 +23,18 @@ class Client:
         self.access_token = access_token
         self.client_platform = "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9"
         self.client_version = get_client_version()
-        self.riotId = None
-        self.name = None
-        self.tag = None
 
         if region not in regions:
             raise ValueError("Invalid region.")
+
+    async def RSO_GetPlayerInfo(self):
+        """Gets player info."""
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}"
+            }
+            async with session.get(f"https://auth.riotgames.com/userinfo", headers=headers) as resp:
+                return await resp.json()
 
     async def authorize(self, username, password):
         """Authorizes the client and gets entitlements token and access token."""
@@ -39,7 +45,9 @@ class Client:
         await auth.authorize(self.username, self.password)
         self.entitlements_token = auth.entitlements_token
         self.access_token = auth.access_token
-        self.puuid = auth.user_id
+        
+        player_info = await self.RSO_GetPlayerInfo()
+        self.puuid = player_info["sub"]
 
     async def Content_FetchContent(self, region: str = None):
         """Fetches content."""
@@ -206,8 +214,7 @@ class Client:
             async with session.get(f"https://shared.{region}.a.pvp.net/v1/config/{region}") as resp:
                 return await resp.json()
 
-def get_client_version(self) -> str:
+def get_client_version() -> str:
     resp = requests.get("https://valorant-api.com/v1/version")
     respData = resp.json()
     return respData['data']['riotClientBuild']
-

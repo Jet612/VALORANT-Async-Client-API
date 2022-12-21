@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "valorant-client-api"
-version = "0.0.2"
+name = "valorantClientAPI"
+version = "0.0.04"
 authors = [
     { name="Jet612", email="jetflyer1130@gmail.com" },
 ]
