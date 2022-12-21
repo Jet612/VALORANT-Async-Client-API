@@ -19,3 +19,6 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/Jet612/VALORANT-Async-Client-API"
+
+[options]
+packages = find:
