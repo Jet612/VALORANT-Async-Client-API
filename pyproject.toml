@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "valorant-client-api"
+version = "0.0.1"
+authors = [
+    { name="Jet612", email="jetflyer1130@gmail.com" },
+]
+description = "Asynchronous Python wrapper for the non-local VALORANT Client API"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Jet612/VALORANT-Async-Client-API"
