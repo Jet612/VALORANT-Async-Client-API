@@ -13,7 +13,7 @@ class Exceptions:
 
 
 class Client:
-    def __init__(self, puuid: str = None, region: str = "na", entitlements_token: str = None, access_token: str = None):
+    def __init__(self, puuid: str = None, region: str = "na", entitlements_token: str = None, access_token: str = None, client_platform: str = None):
         """If you are using a username and password, you must authorize. If you are using an entitlements token and access token, you do not need to authorize."""
         self.username = None
         self.password = None
@@ -21,8 +21,12 @@ class Client:
         self.region = region.lower()
         self.entitlements_token = entitlements_token
         self.access_token = access_token
-        self.client_platform = "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9"
         self.client_version = get_client_version()
+
+        if client_platform == None:
+            self.client_platform = "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9"
+        else:
+            self.client_platform = client_platform
 
         if region not in regions:
             raise ValueError("Invalid region.")
