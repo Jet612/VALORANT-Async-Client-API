@@ -2,4 +2,4 @@
 Asynchronous Python wrapper for the non-local VALORANT Client API 
 
 # Documentation
-[Documenation Page](docs/documentation.md)
+Read the [Docs](docs/documentation.md) to get started.
