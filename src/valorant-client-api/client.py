@@ -5,11 +5,17 @@ from . import riot_auth
 # Variables
 regions = ["na", "eu", "latam", "br", "ap", "kr", "pbe"]
 
+# Custom Exceptions
+class Exceptions:
+    class NotAuthorized(Exception):
+        """You must authorize before using this function."""
+
+
 class Client:
-    def __init__(self, username: str = None, password: str = None, puuid: str = None, region: str = "na", entitlements_token: str = None, access_token: str = None):
+    def __init__(self, puuid: str = None, region: str = "na", entitlements_token: str = None, access_token: str = None):
         """If you are using a username and password, you must authorize. If you are using an entitlements token and access token, you do not need to authorize."""
-        self.username = username
-        self.password = password
+        self.username = None
+        self.password = None
         self.puuid = puuid
         self.region = region.lower()
         self.entitlements_token = entitlements_token
@@ -19,20 +25,31 @@ class Client:
         self.name = None
         self.tag = None
 
-        # if a username and password or entitlements token and access token are not provided, raise an error
-        if (self.username == None and self.password == None) and (self.entitlements_token == None and self.access_token == None):
-            raise ValueError("Either a username and password or entitlements token and access token are needed.")
-
         if region not in regions:
             raise ValueError("Invalid region.")
 
-    async def authorize(self):
+    async def authorize(self, username, password):
         """Authorizes the client and gets entitlements token and access token."""
-        if self.username == None or self.password == None:
-            raise ValueError("Username and password are needed to authorize.")
+        self.username = username
+        self.password = password
 
         auth = riot_auth.RiotAuth()
         await auth.authorize(self.username, self.password)
         self.entitlements_token = auth.entitlements_token
         self.access_token = auth.access_token
         self.puuid = auth.user_id
+
+    async def MMR_FetchCompetitiveUpdates(self, startIndex: int = 0, size: int = 200):
+        """Fetches competitive updates."""
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.entitlements_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token,
+                "X-Riot-ClientPlatform": self.client_platform
+            }
+            async with session.get(f"https://{self.region}.api.riotgames.com/val/content/v1/contents", headers=headers) as resp:
+                return await resp.json()
+
