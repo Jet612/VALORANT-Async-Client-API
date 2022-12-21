@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "valorantClientAPI"
-version = "0.0.8"
+version = "0.0.91"
 authors = [
     { name="Jet612", email="jetflyer1130@gmail.com" },
 ]
