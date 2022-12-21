@@ -139,10 +139,13 @@ class Client:
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
                 return await resp.json()
 
-    async def MMR_FetchCompetitiveUpdates(self, startIndex: int = 0, size: int = 200, region: str = None):
+    async def MMR_FetchCompetitiveUpdates(self, puuid: str = None, startIndex: int = 0, size: int = 200, region: str = None):
         """Fetches competitive updates."""
         if self.entitlements_token == None or self.access_token == None:
             raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if puuid == None:
+            puuid = self.puuid
 
         if region == None:
             region = self.region
@@ -153,7 +156,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientPlatform": self.client_platform
             }
-            async with session.get(f"https://{region}.api.riotgames.com/val/content/v1/contents", headers=headers) as resp:
+            async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/players/{puuid}/competitiveupdates", headers=headers) as resp:
                 return await resp.json()
 
     async def MMR_FetchLeaderboard(self, seasonId: str, startIndex: int = 0, size: int = 200, region: str = None):
