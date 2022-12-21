@@ -6,7 +6,7 @@ with open("README.md", "r") as readme:
 
 setup(
     name="valorantClientAPI",
-    version="0.0.93",
+    version="0.0.94",
     author="Jet612",
     description="Asynchronous Python wrapper for the non-local VALORANT Client API",
     long_description=long_desc,
@@ -21,7 +21,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src/valorantClientAPI"},
-    packages=find_packages(where="src/valorantClientAPI"),
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
     python_requires=">=3.8",
 )
