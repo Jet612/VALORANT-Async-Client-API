@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "valorant-client-api"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
     { name="Jet612", email="jetflyer1130@gmail.com" },
 ]
@@ -19,6 +19,3 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/Jet612/VALORANT-Async-Client-API"
-
-[options]
-packages = find:
