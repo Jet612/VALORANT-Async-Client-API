@@ -27,7 +27,7 @@ client = valorantClientAPI.Client(entitlements_token="entitlements-token", acces
 ```
 
 ### Setting the Region
-If no region is set it defaults to NA. Capitalization does not matter.
+If no region is set it defaults to 'na'. Capitalization does not matter.
 ```
 import valorantClientAPI
 
@@ -38,21 +38,27 @@ Valid regions are: ["na", "eu", "latam", "br", "ap", "kr", "pbe"]
 # Endpoints
 Endpoint names and further docs can be found in [techchrism's valorant-api-docs](https://github.com/techchrism/valorant-api-docs/tree/trunk/docs)
 ### Endpoint Examples
+See more examples in [examples.py](examples/example.py)
+
 Using the MMR_FetchLeaderboard endpoint
 ```
 import valorantClientAPI
 
 client = valorantClientAPI.Client(region='na')
-await client.authorize("username", "password123")
 
-leaderboard_data = await client.MMR_FetchLeaderboard(seasonID)
+async def main():
+    await client.authorize("username", "password123")
+
+    leaderboard_data = await client.MMR_FetchLeaderboard(seasonID)
 ```
 Using the MMR_FetchPlayer endpoint
 ```
 import valorantClientAPI
 
 client = valorantClientAPI.Client(region='na')
-await client.authorize("username", "password123")
 
-player_data = await client.MMR_FetchPlayer()
+async def main():
+    await client.authorize("username", "password123")
+
+    player_data = await client.MMR_FetchPlayer()
 ```

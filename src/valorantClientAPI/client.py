@@ -139,7 +139,7 @@ class Client:
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
                 return await resp.json()
 
-    async def MMR_FetchCompetitiveUpdates(self, puuid: str = None, startIndex: int = 0, size: int = 200, region: str = None):
+    async def MMR_FetchCompetitiveUpdates(self, puuid: str = None, region: str = None):
         """Fetches competitive updates."""
         if self.entitlements_token == None or self.access_token == None:
             raise Exceptions.NotAuthorized("You must authorize before using this function.")
