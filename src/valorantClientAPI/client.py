@@ -42,7 +42,7 @@ class Client:
         self.password = password
 
         auth = riot_auth.RiotAuth()
-        await auth.authorize(self.username, self.password)
+        await auth.authorize(username, password)
         self.entitlements_token = auth.entitlements_token
         self.access_token = auth.access_token
         
