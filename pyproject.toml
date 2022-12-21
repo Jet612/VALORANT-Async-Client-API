@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "valorantClientAPI"
-version = "0.0.91"
+version = "0.0.93"
 authors = [
     { name="Jet612", email="jetflyer1130@gmail.com" },
 ]
 description = "Asynchronous Python wrapper for the non-local VALORANT Client API"
 readme = "readme.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -19,3 +19,5 @@ classifiers = [
 
 [project.urls]
 "Homepage" = "https://github.com/Jet612/VALORANT-Async-Client-API"
+"Documentation" = "https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs"
+"Bug Tracker" = "https://github.com/users/Jet612/projects/8"

@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: valorantClientAPI
+Version: 0.0.92
+Summary: Asynchronous Python wrapper for the non-local VALORANT Client API
+Author-email: Jet612 <jetflyer1130@gmail.com>
+Project-URL: Homepage, https://github.com/Jet612/VALORANT-Async-Client-API
+Project-URL: Documentation, https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs
+Project-URL: Bug Tracker, https://github.com/users/Jet612/projects/8
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# VALORANT-Async-Client-API
+Asynchronous Python wrapper for the non-local VALORANT Client API 
+
+### !!!This package is still in beta!!!
+
+# Documentation
+Read the [Docs page](https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs) to get started.

@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+valorantClientAPI.egg-info/PKG-INFO
+valorantClientAPI.egg-info/SOURCES.txt
+valorantClientAPI.egg-info/dependency_links.txt
+valorantClientAPI.egg-info/top_level.txt
