@@ -6,4 +6,7 @@ Asynchronous Python wrapper for the non-local VALORANT Client API
 # Documentation
 Read the [Docs page](https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs) to get started.
 
-Made by @Jet612
+# Support
+For support create an issue on [Github](https://github.com/Jet612/VALORANT-Async-Client-API) or Join the [Discord](https://discord.com/invite/mVXpvunBbF) and type in [#vca-general](https://discord.com/channels/1053395109581946930/1055236665930682448)
+
+Made by Jet#6164(@Jet612)
