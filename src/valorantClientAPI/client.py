@@ -1,6 +1,7 @@
 # Imports
 import aiohttp
 import requests
+import json
 from . import riot_auth
 
 # Variables
@@ -38,7 +39,11 @@ class Client:
                 "Authorization": f"Bearer {self.access_token}"
             }
             async with session.get(f"https://auth.riotgames.com/userinfo", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def authorize(self, username: str, password: str, use_query_response_mode: bool = False, multi_factor_code: str = None) -> None:
         """Authorizes the client and gets entitlements token and access token."""
@@ -64,7 +69,11 @@ class Client:
                 "X-Riot-ClientVersion": self.client_version
             }
             async with session.get(f"https://{region}.api.riotgames.com/val/content/v1/contents", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def AccountXP_GetPlayer(self, puuid: str = None, region: str = None):
         """Gets player's account XP."""
@@ -83,7 +92,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/account-xp/v1/players/{puuid}", headers=headers) as resp:
-                return await resp.json()
+                return json.loads(await resp.text())
 
     async def MMR_FetchPlayer(self, puuid: str = None, region: str = None):
         """Fetches player's MMR."""
@@ -104,7 +113,11 @@ class Client:
                 "X-Riot-ClientVersion": self.client_version
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/players/{puuid}", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def MatchHistory_FetchMatchHistory(self, puuid: str = None, region: str = None):
         """Fetches match history."""
@@ -125,7 +138,11 @@ class Client:
                 "X-Riot-ClientVersion": self.client_version
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/match-history/v1/history/{puuid}", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def MatchDetails_FetchMatchDetails(self, matchId: str, region: str = None):
         """Fetches match details."""
@@ -141,7 +158,11 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def MMR_FetchCompetitiveUpdates(self, puuid: str = None, region: str = None):
         """Fetches competitive updates."""
@@ -161,7 +182,11 @@ class Client:
                 "X-Riot-ClientPlatform": self.client_platform
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/players/{puuid}/competitiveupdates", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def MMR_FetchLeaderboard(self, seasonId: str, startIndex: int = 0, size: int = 200, region: str = None):
         """Fetches Leaderboard."""
@@ -178,7 +203,11 @@ class Client:
                 "X-Riot-ClientVersion": self.client_version
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/leaderboards/affinity/na/queue/competitive/season/{seasonId}?startIndex=0&size={size}", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def Restrictions_FetchPlayerRestrictionsV2(self, region: str = None):
         """Fetches player restrictions."""
@@ -194,7 +223,11 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/restrictions/v3/penalties", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def ItemProgressionDefinitionsV2_Fetch(self, region: str = None):
         """Fetches item progression definitions."""
@@ -210,7 +243,11 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/contract-definitions/v3/item-upgrades", headers=headers) as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
     async def Config_FetchConfig(self, region: str = None):
         """Fetch Config."""
@@ -219,7 +256,11 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://shared.{region}.a.pvp.net/v1/config/{region}") as resp:
-                return await resp.json()
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
 
 def get_client_version() -> str:
     resp = requests.get("https://valorant-api.com/v1/version")
