@@ -58,6 +58,7 @@ class Client:
         player_info = await self.RSO_GetPlayerInfo()
         self.puuid = player_info["sub"]
 
+    # PVP Endpoints
     async def Content_FetchContent(self, region: str = None):
         """Fetches content."""
         if region == None:
@@ -256,6 +257,101 @@ class Client:
 
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://shared.{region}.a.pvp.net/v1/config/{region}") as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    # Store Endpoints
+    async def Store_GetOffers(self, region: str = None):
+        """Gets store offers."""
+        if region == None:
+            region = self.region
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://store.{region}.a.pvp.net/store/v2/offers", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    async def Store_GetStorefrontV2(self, region: str = None, puuid: str = None):
+        """Gets storefront."""
+        if region == None:
+            region = self.region
+
+        if puuid == None:
+            puuid = self.puuid
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://pd.{region}.a.pvp.net/store/v2/storefront/{puuid}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    async def Store_GetWallet(self, region: str = None, puuid: str = None):
+        """Gets wallet."""
+        if region == None:
+            region = self.region
+
+        if puuid == None:
+            puuid = self.puuid
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/wallet/{puuid}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    async def Store_GetOrder(self, orderId: str, region: str = None):
+        """Get Order."""
+        if region == None:
+            region = self.region
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/order/{orderId}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    async def Store_GetEntitlements(self, itemTypeId: str, region: str = None, puuid: str = None):
+        """Get Entitlements."""
+        if region == None:
+            region = self.region
+
+        if puuid == None:
+            puuid = self.puuid
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/entitlements/{puuid}/{itemTypeId}", headers=headers) as resp:
                 contentType = resp.headers.get("Content-Type")
                 if contentType == "application/json; charset=utf-8":
                     return await resp.json()

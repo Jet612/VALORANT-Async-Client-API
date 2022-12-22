@@ -1,5 +1,5 @@
 # VALORANT-Async-Client-API
-Asynchronous Python wrapper for the non-local VALORANT Client API 
+Asynchronous Python wrapper for VALORANT's Client API 
 
 ### !!!This package is still in beta!!!
 
