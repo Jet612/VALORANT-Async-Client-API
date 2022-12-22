@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: valorantClientAPI
-Version: 0.0.96
+Version: 0.0.97
 Summary: Asynchronous Python wrapper for the non-local VALORANT Client API
 Home-page: https://github.com/Jet612/VALORANT-Async-Client-API
 Author: Jet612

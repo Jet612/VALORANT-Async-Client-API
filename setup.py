@@ -6,7 +6,7 @@ with open("README.md", "r") as readme:
 
 setup(
     name="valorantClientAPI",
-    version="0.0.96",
+    version="0.0.97",
     author="Jet612",
     description="Asynchronous Python wrapper for the non-local VALORANT Client API",
     long_description=long_desc,
