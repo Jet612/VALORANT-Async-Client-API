@@ -14,14 +14,14 @@ class Exceptions:
 
 
 class Client:
-    def __init__(self, puuid: str = None, region: str = "na", entitlements_token: str = None, access_token: str = None, client_platform: str = None):
-        """If you are using a username and password, you must authorize. If you are using an entitlements token and access token, you do not need to authorize."""
+    def __init__(self, region: str = "na", client_platform: str = None):
+        """Initializes the client."""
         self.username = None
         self.password = None
-        self.puuid = puuid
+        self.puuid = None
         self.region = region.lower()
-        self.entitlements_token = entitlements_token
-        self.access_token = access_token
+        self.entitlements_token = None
+        self.access_token = None
         self.client_version = get_client_version()
 
         if client_platform == None:
