@@ -14,14 +14,14 @@ class Exceptions:
 
 
 class Client:
-    def __init__(self, region: str = "na", client_platform: str = None):
+    def __init__(self, region: str = "na", client_platform: str = None, entitlements_token: str = None, access_token: str = None):
         """Initializes the client."""
         self.username = None
         self.password = None
         self.puuid = None
         self.region = region.lower()
-        self.entitlements_token = None
-        self.access_token = None
+        self.entitlements_token = entitlements_token
+        self.access_token = access_token
         self.client_version = get_client_version()
 
         if client_platform == None:
@@ -352,6 +352,24 @@ class Client:
             }
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/entitlements/{puuid}/{itemTypeId}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8":
+                    return json.loads(await resp.text())
+
+    # Other
+    async def PlayerPref_SavePreferenceV3(self, region: str = None, puuid: str = None):
+        """Save Preference."""
+        if puuid == None:
+            puuid = self.puuid
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"https://playerpreferences.riotgames.com/playerPref/v3/savePreference", headers=headers) as resp:
                 contentType = resp.headers.get("Content-Type")
                 if contentType == "application/json; charset=utf-8":
                     return await resp.json()
