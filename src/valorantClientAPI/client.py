@@ -31,6 +31,11 @@ class Client:
 
         if region not in regions:
             raise ValueError("Invalid region.")
+    
+    async def SetTokens(self, access_token: str, entitlements_token: str):
+        """Sets tokens."""
+        self.access_token = access_token
+        self.entitlements_token = entitlements_token
 
     async def RSO_GetPlayerInfo(self):
         """Gets player info."""
