@@ -384,4 +384,4 @@ class Client:
 def get_client_version() -> str:
     resp = requests.get("https://valorant-api.com/v1/version")
     respData = resp.json()
-    return respData['data']['riotClientBuild']
+    return respData['data']['riotClientVersion']
