@@ -382,10 +382,6 @@ class Client:
                     return json.loads(await resp.text())
 
 def get_client_version() -> str:
-    # As of 1/18/2023, this endpoint is returning the wrong verson.
-    #resp = requests.get("https://valorant-api.com/v1/version")
-    #respData = resp.json()
-    #return respData['data']['riotClientVersion']
-
-    # Working Version
-    return "release-06.00-shipping-8-814611"
+    resp = requests.get("https://valorant-api.com/v1/version")
+    respData = resp.json()
+    return respData['data']['riotClientVersion']
