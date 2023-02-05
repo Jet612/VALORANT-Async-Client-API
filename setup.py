@@ -27,5 +27,10 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.8",
-    install_requires=requirementsList,
+    install_requires=[
+                    'aiohttp==3.8.3',
+                    'dataclass_wizard==0.22.2',
+                    'requests==2.28.2',
+                    'setuptools==65.5.0'
+                    ]
 )
