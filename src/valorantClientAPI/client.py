@@ -3,7 +3,9 @@ import aiohttp
 import requests
 import json
 from . import riot_auth
-
+from .response.core_game import CoreGameDetails, CoreGameMatchLoadout
+from .response.pre_game import PreGameDetails
+from dataclass_wizard import fromdict
 # Variables
 regions = ["na", "eu", "latam", "br", "ap", "kr", "pbe"]
 
@@ -267,6 +269,133 @@ class Client:
                     return await resp.json()
                 elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
                     return json.loads(await resp.text())
+    #Pre Game Endpoints
+    async def Pregame_GetPlayer(self, region: str = None) -> dict:
+        """Get the ID of a game in the pre-game stage"""
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if region == None:
+            region = self.region
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/pregame/v1/players/{self.puuid}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8" or contentType == "application/json":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
+                    return json.loads(await resp.text())
+
+    async def Pregame_GetMatch(self, region: str = None, match_id: str=None) -> PreGameDetails:
+        """Get info for a game in the pre-game stage"""
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if region == None:
+            region = self.region
+
+        if match_id == None:
+            res = await self.Pregame_GetPlayer()
+            match_id = res.get("MatchID")
+
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/pregame/v1/matches/{match_id}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8" or contentType == "application/json":
+                    ret = await resp.json()
+                    return fromdict(PreGameDetails, ret)
+                elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
+                    ret = json.loads(await resp.text())
+                    return fromdict(PreGameDetails, ret)
+
+    #Current Game Endpoints
+    async def CoreGame_GetPlayer(self, region: str = None) -> dict:
+        """Get the ID of a game in progress
+        this api & PreGame_GetPlayer() api returns the same results.
+        So, if the game is already in CoreGame stage. Then use this method
+        to get match_id. As each endpoint is only response if the game is on that 
+        stage.
+        """
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if region == None:
+            region = self.region
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/players/{self.puuid}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8" or contentType == "application/json":
+                    return await resp.json()
+                elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
+                    return json.loads(await resp.text())
+
+    async def CoreGame_FetchMatch(self, region: str = None, match_id: str = None) -> CoreGameDetails:
+        """Get match details of a game in progress"""
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if region == None:
+            region = self.region
+        
+        if match_id == None:
+            res = await self.CoreGame_GetPlayer()
+            match_id = res.get("MatchID")
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/matches/{match_id}", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8" or contentType == "application/json":
+                    ret = await resp.json()
+                    return fromdict(CoreGameDetails, ret)
+                elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
+                    ret = json.loads(await resp.text())
+                    return fromdict(CoreGameDetails, ret)
+
+    async def CoreGame_FetchMatchLoadouts(self, region: str = None, match_id: str = None) -> CoreGameMatchLoadout:
+        """Get player skins and spray for a game in progress"""
+        if self.entitlements_token == None or self.access_token == None:
+            raise Exceptions.NotAuthorized("You must authorize before using this function.")
+
+        if region == None:
+            region = self.region
+        
+        if match_id == None:
+            res = await self.CoreGame_GetPlayer()
+            match_id = res.get("MatchID")
+
+        async with aiohttp.ClientSession() as session:
+            headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/matches/{match_id}/loadouts", headers=headers) as resp:
+                contentType = resp.headers.get("Content-Type")
+                if contentType == "application/json; charset=utf-8" or contentType == "application/json":
+                    ret = await resp.json()
+                    return fromdict(CoreGameMatchLoadout, ret)
+                elif contentType == "text/plain; charset=utf-8" or contentType == "text/plain":
+                    ret = json.loads(await resp.text())
+                    return fromdict(CoreGameMatchLoadout, ret)
+
+
 
     # Store Endpoints
     async def Store_GetOffers(self, region: str = None):
