@@ -4,9 +4,12 @@ from setuptools import find_packages
 with open("README.md", "r") as readme:
     long_desc = readme.read()
 
+with open("requirements.txt", "r") as req:
+    requirementsList = req.read().splitlines()
+
 setup(
     name="valorantClientAPI",
-    version="0.1.4",
+    version="0.1.5",
     author="Jet612",
     description="Asynchronous Python wrapper for VALORANT's Client API ",
     long_description=long_desc,
@@ -24,4 +27,5 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     python_requires=">=3.8",
+    install_requires=requirementsList,
 )
