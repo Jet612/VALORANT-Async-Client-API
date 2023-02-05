@@ -4,9 +4,6 @@ from setuptools import find_packages
 with open("README.md", "r") as readme:
     long_desc = readme.read()
 
-with open("requirements.txt", "r") as req:
-    requirementsList = req.read().splitlines()
-
 setup(
     name="valorantClientAPI",
     version="0.1.5",
