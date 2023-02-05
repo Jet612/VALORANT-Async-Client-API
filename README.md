@@ -1,5 +1,5 @@
 # VALORANT-Async-Client-API
-Asynchronous Python wrapper for VALORANT's
+Asynchronous Python wrapper for VALORANT's client API
 
 # Documentation
 Read the [Docs page](https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs) to get started.
