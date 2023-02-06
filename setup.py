@@ -1,12 +1,12 @@
 from setuptools import setup
-from setuptools import find_packages
+from setuptools import find_namespace_packages
 
 with open("README.md", "r") as readme:
     long_desc = readme.read()
 
 setup(
     name="valorantClientAPI",
-    version="0.1.5",
+    version="0.1.6",
     author="Jet612",
     description="Asynchronous Python wrapper for VALORANT's Client API ",
     long_description=long_desc,
@@ -22,7 +22,8 @@ setup(
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    packages=find_namespace_packages(where="src"),
+    include_package_data=True,
     python_requires=">=3.8",
     install_requires=[
                     'aiohttp==3.8.3',
