@@ -6,7 +6,7 @@
 - [Endpoints](#endpoints)
     - [Endpoint Examples](#endpoint-examples)
 # Getting Started
-### Installing the Package
+## Installing the Package
 Installing newest version
 ```
 pip install valorantClientAPI
@@ -18,7 +18,7 @@ pip install valorantClientAPI==[version]
 ```
 pip install valorantClientAPI==0.0.1
 ```
-### Authorizing
+## Authorizing
 ```python
 import valorantClientAPI
 
@@ -37,7 +37,7 @@ async def main():
     await client.authorize("username", "password", multi_factor_code="code")
 ```
 
-### Setting the Region
+## Setting the Region
 If no region is set it defaults to 'na'. Capitalization does not matter.
 ```python
 import valorantClientAPI
@@ -46,7 +46,7 @@ client = valorantClientAPI.Client(region='na')
 ```
 Valid regions are: ["na", "eu", "latam", "br", "ap", "kr", "pbe"]
 
-### Using a Custom Client Platform
+## Using a Custom Client Platform
 
 # Endpoints
 Endpoint names and further docs can be found in [techchrism's valorant-api-docs](https://github.com/techchrism/valorant-api-docs/tree/trunk/docs)
