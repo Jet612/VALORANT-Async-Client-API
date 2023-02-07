@@ -17,3 +17,6 @@ src/valorantClientAPI/utils/helper.py
 src/valorantClientAPI/response/__pycache__/pre_game.cpython-310.pyc
 src/valorantClientAPI/__pycache__/riot_auth.cpython-310.pyc
 src/valorantClientAPI/__pycache__/client.cpython-310.pyc
+src/valorantClientAPI/__pycache__/client.cpython-310.pyc
+src/valorantClientAPI/__pycache__/client.cpython-310.pyc
+src/valorantClientAPI/__pycache__/riot_auth.cpython-310.pyc

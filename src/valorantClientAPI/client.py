@@ -8,6 +8,7 @@ from .response.pre_game import PreGameDetails
 from .response.mmr import MatchHistory, MatchDetails
 from dataclass_wizard import fromdict
 from .utils.limiter import Limiter
+from dataclass_wizard.errors import ParseError
 
 
 # Variables
@@ -207,7 +208,14 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
-                return fromdict(MatchDetails, await content_verify(response=resp))
+                try:
+                    ret= fromdict(MatchDetails, await content_verify(response=resp))
+                    return ret
+                except ParseError as err:
+                    print("Warning!!! Failed to parse the file. You are returned with a json struct.")
+                    print("Either change the modify the MatchDetails class in mmr.py & submit an issue to github")
+                    print(err)
+                    return await content_verify(response=resp)
     
     
     @Limiter()
@@ -509,6 +517,24 @@ class Client:
         async with aiohttp.ClientSession() as session:
             async with session.post(f"https://playerpreferences.riotgames.com/playerPref/v3/savePreference", headers=headers) as resp:
                 return await content_verify(response=resp)
+
+    @Limiter()
+    async def get_username_from_ids(self, region: str = None, puuids: list = []):
+        """Gets username from List of PUUIDs"""
+        if region is None:
+            region = self.region
+
+        if not puuids:
+            puuids.append(self.puuid)
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.put(f"https://pd.{region}.a.pvp.net/name-service/v2/players", headers=headers, data=json.dumps(puuids)) as resp:
+                return await content_verify(response=resp) 
 
 
 def get_client_version() -> str:
