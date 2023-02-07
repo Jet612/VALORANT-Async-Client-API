@@ -518,6 +518,24 @@ class Client:
             async with session.post(f"https://playerpreferences.riotgames.com/playerPref/v3/savePreference", headers=headers) as resp:
                 return await content_verify(response=resp)
 
+    @Limiter()
+    async def get_username_from_ids(self, region: str = None, puuids: list = []):
+        """Gets username from List of PUUIDs"""
+        if region is None:
+            region = self.region
+
+        if not puuids:
+            puuids.append(self.puuid)
+
+        headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "X-Riot-Entitlements-JWT": self.entitlements_token
+            }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.put(f"https://pd.{region}.a.pvp.net/name-service/v2/players", headers=headers, data=json.dumps(puuids)) as resp:
+                return await content_verify(response=resp) 
+
 
 def get_client_version() -> str:
     resp = requests.get("https://valorant-api.com/v1/version")
