@@ -8,6 +8,7 @@ from .response.pre_game import PreGameDetails
 from .response.mmr import MatchHistory, MatchDetails
 from dataclass_wizard import fromdict
 from .utils.limiter import Limiter
+from dataclass_wizard.errors import ParseError
 
 
 # Variables
@@ -207,7 +208,14 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
-                return fromdict(MatchDetails, await content_verify(response=resp))
+                try:
+                    ret= fromdict(MatchDetails, await content_verify(response=resp))
+                    return ret
+                except ParseError as err:
+                    print("Warning!!! Failed to parse the file. You are returned with a json struct.")
+                    print("Either change the modify the MatchDetails class in mmr.py & submit an issue to github")
+                    print(err)
+                    return await content_verify(response=resp)
     
     
     @Limiter()
