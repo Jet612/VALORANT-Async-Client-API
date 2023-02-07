@@ -17,7 +17,7 @@ setup(
         "Bug Tracker": "https://github.com/users/Jet612/projects/8",
     },
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
