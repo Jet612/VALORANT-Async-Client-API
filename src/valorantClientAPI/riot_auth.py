@@ -1,4 +1,5 @@
-# Sourced  and slightly modified from https://github.com/PureAspiration/Valemporium/blob/master/riot_authorization.py
+# Sourced from https://github.com/tuna-tuna/python-riot-auth/blob/main/riot_auth/auth.py
+# Original author https://github.com/floxay/python-riot-auth
 
 import ctypes
 import json
@@ -168,19 +169,20 @@ class RiotAuth:
         self.__update(extract_jwt=True, **data)
 
     async def authorize(
-            self, username: str, password: str, use_query_response_mode: bool = False, multifactor_code: str = None
-    ) -> None:
+        self, username: str, password: str, use_query_response_mode: bool = False
+    ) -> str:
         """
         Authenticate using username and password.
+        'Success' -> Successfully authorized
+        'MFA' -> Required MFA
         """
         if username and password:
             self._cookie_jar.clear()
 
         conn = aiohttp.TCPConnector(ssl=self._auth_ssl_ctx)
         async with aiohttp.ClientSession(
-                connector=conn, raise_for_status=True, cookie_jar=self._cookie_jar
+            connector=conn, raise_for_status=True, cookie_jar=self._cookie_jar
         ) as session:
-            # noinspection SpellCheckingInspection
             headers = {
                 "Accept-Encoding": "deflate, gzip, zstd",
                 "user-agent": self.RIOT_CLIENT_USER_AGENT % "rso-auth",
@@ -201,14 +203,14 @@ class RiotAuth:
                 "scope": "openid link ban lol_region account",
             }
             if use_query_response_mode:
-                body['response_mode'] = "query"
+                body["response_mode"] = "query"
             async with session.post(
-                    "https://auth.riotgames.com/api/v1/authorization",
-                    json=body,
-                    headers=headers,
+                "https://auth.riotgames.com/api/v1/authorization",
+                json=body,
+                headers=headers,
             ) as r:
                 data: Dict = await r.json()
-                resp_type = data['type']
+                resp_type = data["type"]
             # endregion
 
             if resp_type != "response":  # not reauth
@@ -217,74 +219,108 @@ class RiotAuth:
                     "language": "en_US",
                     "password": password,
                     "region": None,
-                    "remember": False,
+                    "remember": True,
                     "type": "auth",
                     "username": username,
                 }
-                while True:
-                    async with session.put(
-                            "https://auth.riotgames.com/api/v1/authorization",
-                            json=body,
-                            headers=headers,
-                    ) as r:
-                        data: Dict = await r.json()
-                        resp_type = data['type']
-                        if resp_type == "response":
-                            break
-                        elif resp_type == "auth":
-                            err = data.get("error")
-                            if err == "auth_failure":
-                                raise Exceptions.RiotAuthenticationError(
-                                    f"Failed to authenticate. Make sure username and password are correct. `{err}`."
-                                )
-                            elif err == "rate_limited":
-                                raise Exceptions.RiotRatelimitError()
-                            else:
-                                raise Exceptions.RiotUnknownErrorTypeError(
-                                    f"Got unknown error `{err}` during authentication."
-                                )
-                        elif resp_type == "multifactor":
-                            if multifactor_code is None:
-                                raise Exceptions.RiotMultifactorDetectError("Detected multifactor. Please enter your multifactor code.")
-                            elif "error" in data and data["error"] == "multifactor_attempt_failed":
-                                raise Exceptions.RiotMultifactorAuthError("Invalid multifactor code. Please check and try again.")
-                            else:
-                                body = {
-                                    "type": "multifactor",
-                                    "code": multifactor_code,
-                                    "rememberDevice": True
-                                }
-                        else:
-                            raise Exceptions.RiotUnknownResponseTypeError(
-                                f"Got unknown response type `{resp_type}` during authentication."
+                async with session.put(
+                    "https://auth.riotgames.com/api/v1/authorization",
+                    json=body,
+                    headers=headers,
+                ) as r:
+                    data: Dict = await r.json()
+                    resp_type = data["type"]
+                    if resp_type == "response":
+                        ...
+                    elif resp_type == "auth":
+                        err = data.get("error")
+                        if err == "auth_failure":
+                            raise Exceptions.RiotAuthenticationError(
+                                f"Failed to authenticate. Make sure username and password are correct. `{err}`."
                             )
-                    # endregion
+                        elif err == "rate_limited":
+                            raise Exceptions.RiotRatelimitError()
+                        else:
+                            raise Exceptions.RiotUnknownErrorTypeError(
+                                f"Got unknown error `{err}` during authentication."
+                            )
+                    elif resp_type == "multifactor":
+                        return 'MFA'
+                    else:
+                        raise Exceptions.RiotUnknownResponseTypeError(
+                            f"Got unknown response type `{resp_type}` during authentication."
+                        )
+                # endregion
 
             self._cookie_jar = session.cookie_jar
             self.__set_tokens_from_uri(data)
 
             # region Get new entitlements token
-            headers['Authorization'] = f"{self.token_type} {self.access_token}"
+            headers["Authorization"] = f"{self.token_type} {self.access_token}"
             async with session.post(
-                    "https://entitlements.auth.riotgames.com/api/token/v1",
-                    headers=headers,
-                    json={},
-                    # json={"urn": "urn:entitlement:%"},
+                "https://entitlements.auth.riotgames.com/api/token/v1",
+                headers=headers,
+                json={},
+                # json={"urn": "urn:entitlement:%"},
             ) as r:
-                self.entitlements_token = (await r.json())['entitlements_token']
+                self.entitlements_token = (await r.json())["entitlements_token"]
             # endregion
 
-    async def reauthorize(self) -> bool:
-        """
-        Reauthenticate using cookies.
-        Returns a ``bool`` indicating success or failure.
-        """
-        try:
-            await self.authorize("", "")
-            return True
-        except Exceptions.RiotAuthenticationError:  # because credentials are empty
-            return False
+            return 'Success'
 
+    async def mfa(self, mfaCode: str) -> str:
+        """
+        Send MFA Code
+        
+        """
+        conn = aiohttp.TCPConnector(ssl=self._auth_ssl_ctx)
+        async with aiohttp.ClientSession(
+            connector=conn, raise_for_status=True, cookie_jar=self._cookie_jar
+        ) as session:
+            headers = {
+                "Accept-Encoding": "deflate, gzip, zstd",
+                "user-agent": self.RIOT_CLIENT_USER_AGENT % "rso-auth",
+                "Cache-Control": "no-cache",
+                "Accept": "application/json",
+            }
+            body = {
+                'type': 'multifactor',
+                'code': mfaCode,
+                'rememberDevice': True,
+            }
+            async with session.put(
+                'https://auth.riotgames.com/api/v1/authorization',
+                json=body,
+                headers=headers
+            ) as r:
+                data: Dict = await r.json()
+                err = data.get('error')
+                if err is not None:
+                    if err == "auth_failure":
+                        raise Exceptions.RiotAuthenticationError(
+                            f"Failed to authenticate. Make sure mfa code is correct. `{err}`."
+                        )
+                    elif err == "rate_limited":
+                        raise Exceptions.RiotRatelimitError()
+                    else:
+                        raise Exceptions.RiotUnknownErrorTypeError(
+                            f"Got unknown error `{err}` during authentication."
+                        )
+                self._cookie_jar = session.cookie_jar
+                self.__set_tokens_from_uri(data)  
+
+            # region Get new entitlements token
+            headers["Authorization"] = f"{self.token_type} {self.access_token}"
+            async with session.post(
+                "https://entitlements.auth.riotgames.com/api/token/v1",
+                headers=headers,
+                json={},
+                # json={"urn": "urn:entitlement:%"},
+            ) as r:
+                self.entitlements_token = (await r.json())["entitlements_token"]
+            # endregion
+
+            return 'Success' 
 
 def get_user_agent():
     response = requests.get("https://valorant-api.com/v1/version")
