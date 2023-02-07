@@ -11,17 +11,27 @@
     - [Other Resources/Projects](#useful-resourcesprojects)
 # Getting Started
 ## Installing the Package
-Installing newest version
+#### Installing newest version
 ```
 pip install valorantClientAPI
 ```
-Installing a specific version
+#### Installing a specific version
 ```
 pip install valorantClientAPI==[version]
 ```
 ```
 pip install valorantClientAPI==0.0.1
 ```
+#### Installing from GitHub
+This is not recomended but is useful in some cases
+```
+pip install git+https://github.com/Jet612/VALORANT-Async-Client-API/tree/[version]
+```
+```
+pip install git+https://github.com/Jet612/VALORANT-Async-Client-API/tree/0.1.6
+```
+You can find versions by going to the [releases](https://github.com/Jet612/VALORANT-Async-Client-API/releases) and looking in the description of the release. If the version is not there use the tag.
+
 [Back to top](#contents)
 ## Authorizing
 ```python
