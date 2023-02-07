@@ -2,6 +2,7 @@
 ![PyPI](https://img.shields.io/pypi/v/valorantclientapi?style=for-the-badge)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/valorantclientapi?style=for-the-badge)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/valorantclientapi?style=for-the-badge)
+![PyPI - Status](https://img.shields.io/pypi/status/valorantclientAPI?style=for-the-badge)
 ![GitHub issues](https://img.shields.io/github/issues/jet612/VALORANT-Async-Client-API?style=for-the-badge)
 
 Asynchronous Python wrapper for VALORANT's client API

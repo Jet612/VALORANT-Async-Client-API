@@ -1,5 +1,4 @@
-from setuptools import setup
-from setuptools import find_namespace_packages
+from setuptools import setup, find_namespace_packages
 
 with open("README.md", "r") as readme:
     long_desc = readme.read()
@@ -20,6 +19,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
     ],
     package_dir={"": "src"},
     packages=find_namespace_packages(where="src"),
