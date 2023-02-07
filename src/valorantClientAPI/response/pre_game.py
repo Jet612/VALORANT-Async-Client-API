@@ -1,12 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass
 from typing import List, Any
 from datetime import datetime
-
-
-class CharacterSelectionState(Enum):
-    EMPTY = ""
-    LOCKED = "locked"
 
 
 @dataclass
@@ -19,9 +13,6 @@ class PlayerIdentity:
     incognito: bool
     hide_account_level: bool
 
-
-class PregamePlayerState(Enum):
-    JOINED = "joined"
 
 
 @dataclass
@@ -37,8 +28,8 @@ class SeasonalBadgeInfo:
 class Player:
     subject: str
     character_id: str
-    character_selection_state: CharacterSelectionState
-    pregame_player_state: PregamePlayerState
+    character_selection_state: str
+    pregame_player_state: str
     competitive_tier: int
     player_identity: PlayerIdentity
     seasonal_badge_info: SeasonalBadgeInfo
@@ -50,10 +41,6 @@ class Team:
     team_id: str
     players: List[Player]
 
-
-@dataclass
-class CastedVotes:
-    pass
 
 
 @dataclass
@@ -72,7 +59,7 @@ class PreGameDetails:
     map_id: str
     map_select_pool: List[Any]
     banned_map_i_ds: List[Any]
-    casted_votes: CastedVotes
+    casted_votes: Any
     map_select_steps: List[Any]
     map_select_step: int
     team1: str
