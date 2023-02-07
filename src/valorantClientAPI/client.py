@@ -387,7 +387,9 @@ class Client:
     
     @Limiter()
     async def CoreGame_FetchMatchLoadouts(self, region: str = None, match_id: str = None) -> CoreGameMatchLoadout:
-        """Get player skins and spray for a game in progress"""
+        """Get player skins and spray for a game in progress.
+        It will return a CoreGameMatchLoadout Object.
+        """
         if self.entitlements_token is None or self.access_token is None:
             raise Exceptions.NotAuthorized("You must authorize before using this function.")
 
