@@ -81,7 +81,7 @@ class Player:
     account_level: int
     behavior_factors: Dict
     new_player_experience_details: Dict[str, Dict[str, Any]]
-    round_damage: Optional[List[Dict]]
+    round_damage: Optional[List[Dict]] = None
     session_playtime_minutes: Optional[int] = 0
     preferred_level_border: Optional[str] = None
     xp_modifications: Optional[List[Dict[str, Any]]] = None
