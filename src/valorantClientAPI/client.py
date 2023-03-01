@@ -41,6 +41,10 @@ class Client:
         self.password = None
         self.puuid = None
         self.region = region.lower()
+        if region.lower() == "br" or region.lower() == "latam":
+            self.shard_region = "na"
+        else:
+            self.shard_region = region.lower()
         self.entitlements_token = entitlements_token
         self.access_token = access_token
         self.client_version = get_client_version()
@@ -52,14 +56,13 @@ class Client:
 
         if region not in regions:
             raise ValueError("Invalid region.")
-       
     
     async def SetTokens(self, access_token: str, entitlements_token: str):
         """Sets tokens."""
         self.access_token = access_token
         self.entitlements_token = entitlements_token
-   
-   
+
+
     @Limiter()
     async def RSO_GetPlayerInfo(self):
         """Gets player info."""
@@ -92,6 +95,13 @@ class Client:
         """Fetches content."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
         
         async with aiohttp.ClientSession() as session:
             headers = {
@@ -117,13 +127,20 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/account-xp/v1/players/{puuid}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/account-xp/v1/players/{puuid}", headers=headers) as resp:
                 return json.loads(await resp.text())
     
     
@@ -138,6 +155,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
@@ -146,7 +170,7 @@ class Client:
                 "X-Riot-ClientPlatform": self.client_platform,
                 "X-Riot-ClientVersion": self.client_version
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/players/{puuid}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/mmr/v1/players/{puuid}", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -177,6 +201,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
         
         if queue_id not in ["competitive", "custom", "deathmatch", "ggteam", "snowball", "spikerush", "unrated", "onefa", "null"]:
             raise Exceptions.InvalidQueueID('Invalid queue ID. Valid queue IDs: queues = ["competitive", "custom", "deathmatch", "ggteam", "snowball", "spikerush", "unrated", "onefa", "null"]')
@@ -188,7 +219,7 @@ class Client:
                 "X-Riot-ClientPlatform": self.client_platform,
                 "X-Riot-ClientVersion": self.client_version
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/match-history/v1/history/{puuid}?startIndex={start_index}&endIndex={end_index}"
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/match-history/v1/history/{puuid}?startIndex={start_index}&endIndex={end_index}"
             + (f"&queue={queue_id}" if queue_id != "null" else ""), headers=headers) as resp:
                 return fromdict(MatchHistory, await content_verify(response=resp))
     
@@ -201,13 +232,20 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
                 try:
                     ret= fromdict(MatchDetails, await content_verify(response=resp))
                     return ret
@@ -229,6 +267,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
@@ -236,7 +281,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientPlatform": self.client_platform
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/players/{puuid}/competitiveupdates", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/mmr/v1/players/{puuid}/competitiveupdates", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -248,6 +293,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
@@ -255,7 +307,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token,
                 "X-Riot-ClientVersion": self.client_version
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/mmr/v1/leaderboards/affinity/na/queue/competitive/season/{seasonId}?startIndex=0&size={size}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/mmr/v1/leaderboards/affinity/na/queue/competitive/season/{seasonId}?startIndex=0&size={size}", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -267,13 +319,20 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/restrictions/v3/penalties", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/restrictions/v3/penalties", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -285,24 +344,38 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://pd.{region}.a.pvp.net/contract-definitions/v3/item-upgrades", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/contract-definitions/v3/item-upgrades", headers=headers) as resp:
                 return await content_verify(response=resp)
-   
-   
+
+
     @Limiter()
     async def Config_FetchConfig(self, region: str = None):
         """Fetch Config."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://shared.{region}.a.pvp.net/v1/config/{region}") as resp:
+            async with session.get(f"https://shared.{shard_region}.a.pvp.net/v1/config/{region}") as resp:
                 return await content_verify(response=resp)
     
     
@@ -314,16 +387,23 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/pregame/v1/players/{self.puuid}", headers=headers) as resp:
+            async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/pregame/v1/players/{self.puuid}", headers=headers) as resp:
                 return await content_verify(response=resp)
-   
-   
+
+
     @Limiter()
     async def Pregame_GetMatch(self, region: str = None, match_id: str=None) -> PreGameDetails:
         """Get info for a game in the pre-game stage"""
@@ -332,6 +412,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if match_id is None:
             res = await self.Pregame_GetPlayer()
@@ -343,10 +430,10 @@ class Client:
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/pregame/v1/matches/{match_id}", headers=headers) as resp:
+            async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/pregame/v1/matches/{match_id}", headers=headers) as resp:
                 return await content_verify(response=resp)
 
-   
+
     #Current Game Endpoints
     @Limiter()
     async def CoreGame_GetPlayer(self, region: str = None) -> dict:
@@ -361,13 +448,20 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/players/{self.puuid}", headers=headers) as resp:
+            async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/core-game/v1/players/{self.puuid}", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -379,6 +473,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if match_id is None:
             res = await self.CoreGame_GetPlayer()
@@ -389,7 +490,7 @@ class Client:
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/matches/{match_id}", headers=headers) as resp:
+            async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/core-game/v1/matches/{match_id}", headers=headers) as resp:
                 return fromdict(CoreGameDetails, await content_verify(response=resp))
     
     
@@ -403,6 +504,13 @@ class Client:
 
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
         
         if match_id is None:
             res = await self.CoreGame_GetPlayer()
@@ -413,7 +521,7 @@ class Client:
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
-            async with session.get(f"https://glz-{region}-1.{region}.a.pvp.net/core-game/v1/matches/{match_id}/loadouts", headers=headers) as resp:
+            async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/core-game/v1/matches/{match_id}/loadouts", headers=headers) as resp:
                 return fromdict(CoreGameMatchLoadout, await content_verify(response=resp))
 
 
@@ -424,6 +532,13 @@ class Client:
         """Gets store offers."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         headers = {
                 "Authorization": f"Bearer {self.access_token}",
@@ -432,13 +547,20 @@ class Client:
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://store.{region}.a.pvp.net/store/v2/offers", headers=headers) as resp:
                 return await content_verify(response=resp)
-   
-   
+
+
     @Limiter()
     async def Store_GetStorefrontV2(self, region: str = None, puuid: str = None):
         """Gets storefront."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if puuid is None:
             puuid = self.puuid
@@ -448,7 +570,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://pd.{region}.a.pvp.net/store/v2/storefront/{puuid}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/store/v2/storefront/{puuid}", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -457,6 +579,13 @@ class Client:
         """Gets wallet."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if puuid is None:
             puuid = self.puuid
@@ -466,7 +595,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/wallet/{puuid}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/store/v1/wallet/{puuid}", headers=headers) as resp:
                 return await content_verify(response=resp)
     
     
@@ -475,21 +604,35 @@ class Client:
         """Get Order."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         headers = {
                 "Authorization": f"Bearer {self.access_token}",
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/order/{orderId}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/store/v1/order/{orderId}", headers=headers) as resp:
                 return await content_verify(response=resp)
-   
-   
+
+
     @Limiter()
     async def Store_GetEntitlements(self, itemTypeId: str, region: str = None, puuid: str = None):
         """Get Entitlements."""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if puuid is None:
             puuid = self.puuid
@@ -499,7 +642,7 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://pd.{region}.a.pvp.net/store/v1/entitlements/{puuid}/{itemTypeId}", headers=headers) as resp:
+            async with session.get(f"https://pd.{shard_region}.a.pvp.net/store/v1/entitlements/{puuid}/{itemTypeId}", headers=headers) as resp:
                 return await content_verify(response=resp)                
 
     
@@ -523,6 +666,13 @@ class Client:
         """Gets username from List of PUUIDs"""
         if region is None:
             region = self.region
+            shard_region = self.shard_region
+        else:
+            region = region.lower()
+            if region == "br" or region == "latam":
+                shard_region = "na"
+            else:
+                shard_region = region.lower()
 
         if not puuids:
             puuids.append(self.puuid)
@@ -533,7 +683,7 @@ class Client:
             }
 
         async with aiohttp.ClientSession() as session:
-            async with session.put(f"https://pd.{region}.a.pvp.net/name-service/v2/players", headers=headers, data=json.dumps(puuids)) as resp:
+            async with session.put(f"https://pd.{shard_region}.a.pvp.net/name-service/v2/players", headers=headers, data=json.dumps(puuids)) as resp:
                 return await content_verify(response=resp) 
 
 
