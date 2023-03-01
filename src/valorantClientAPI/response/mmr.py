@@ -24,6 +24,7 @@ class History:
 #this is the top layer class to be imported
 @dataclass
 class MatchHistory:
+    httpStatus = 200
     subject: str
     begin_index: int
     end_index: int
@@ -148,6 +149,7 @@ class MatchDetails:
     """
     The match details of a given match_id
     """
+    httpStatus = 200
     match_info: MatchInfo
     players: List[Player]
     bots: List[Any]

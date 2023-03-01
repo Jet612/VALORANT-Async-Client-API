@@ -45,6 +45,7 @@ class Team:
 
 @dataclass
 class PreGameDetails:
+    httpStatus = 200
     id: str
     version: int
     teams: List[Team]

@@ -6,6 +6,7 @@ from . import riot_auth
 from .response.core_game import CoreGameDetails, CoreGameMatchLoadout
 from .response.pre_game import PreGameDetails
 from .response.mmr import MatchHistory, MatchDetails
+from .response.errors import httpStatusError
 from dataclass_wizard import fromdict
 from .utils.limiter import Limiter
 from dataclass_wizard.errors import ParseError
@@ -221,7 +222,10 @@ class Client:
             }
             async with session.get(f"https://pd.{shard_region}.a.pvp.net/match-history/v1/history/{puuid}?startIndex={start_index}&endIndex={end_index}"
             + (f"&queue={queue_id}" if queue_id != "null" else ""), headers=headers) as resp:
-                return fromdict(MatchHistory, await content_verify(response=resp))
+                if resp.get("httpStatus") != None:
+                    return fromdict(httpStatusError, await content_verify(response=resp))
+                else:
+                    return fromdict(MatchHistory, await content_verify(response=resp))
     
     
     @Limiter()
@@ -247,8 +251,11 @@ class Client:
             }
             async with session.get(f"https://pd.{shard_region}.a.pvp.net/match-details/v1/matches/{matchId}", headers=headers) as resp:
                 try:
-                    ret= fromdict(MatchDetails, await content_verify(response=resp))
-                    return ret
+                    if resp.get("httpStatus") != None:
+                        return fromdict(httpStatusError, await content_verify(response=resp))
+                    else:
+                        ret= fromdict(MatchDetails, await content_verify(response=resp))
+                        return ret
                 except ParseError as err:
                     print("Warning!!! Failed to parse the file. You are returned with a json struct.")
                     print("Either change the modify the MatchDetails class in mmr.py & submit an issue to github")
@@ -491,7 +498,10 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/core-game/v1/matches/{match_id}", headers=headers) as resp:
-                return fromdict(CoreGameDetails, await content_verify(response=resp))
+                if resp.get("httpStatus") != None:
+                    return fromdict(httpStatusError, await content_verify(response=resp))
+                else:
+                    return fromdict(CoreGameDetails, await content_verify(response=resp))
     
     
     @Limiter()
@@ -522,7 +532,10 @@ class Client:
                 "X-Riot-Entitlements-JWT": self.entitlements_token
             }
             async with session.get(f"https://glz-{region}-1.{shard_region}.a.pvp.net/core-game/v1/matches/{match_id}/loadouts", headers=headers) as resp:
-                return fromdict(CoreGameMatchLoadout, await content_verify(response=resp))
+                if resp.get("httpStatus") != None:
+                    return fromdict(httpStatusError, await content_verify(response=resp))
+                else:
+                    return fromdict(CoreGameMatchLoadout, await content_verify(response=resp))
 
 
 

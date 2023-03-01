@@ -57,6 +57,7 @@ class Player:
 
 @dataclass
 class CoreGameDetails:
+    httpStatus = 200
     match_id: str
     version: int
     state: str
@@ -120,4 +121,5 @@ class LoadoutElement:
 
 @dataclass
 class CoreGameMatchLoadout:
+    httpStatus = 200
     loadouts: List[LoadoutElement]
