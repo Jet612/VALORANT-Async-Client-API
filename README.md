@@ -17,4 +17,9 @@ For support create an issue on [Github](https://github.com/Jet612/VALORANT-Async
 ![GitHub forks](https://img.shields.io/github/forks/jet612/VALORANT-Async-Client-API)
 ![GitHub Repo stars](https://img.shields.io/github/stars/jet612/VALORANT-Async-Client-API)
 
+# Quick Links
+- [Discord](https://discord.gg/mVXpvunBbF)
+- [pypi](https://pypi.org/project/valorantClientAPI/)
+- [GitHub](https://github.com/Jet612/VALORANT-Async-Client-API)
+- [Documentation](https://github.com/Jet612/VALORANT-Async-Client-API/tree/main/docs)
 
